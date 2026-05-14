@@ -1,4 +1,5 @@
 import User from "../models/user.models.js"
+import { hashPassword } from "../utils/hash.js"
 
 export const getUsers = async (req, res) => {
     try {
@@ -21,7 +22,7 @@ export const getUser = async (req, res) => {
 
 export const postUsers = async (req, res) => {
     try {
-        const newUser = new User(req.body)
+        const newUser = new User({ ...req.body, password: hashPassword(req.body.password) })
         await newUser.save()
         res.status(201).json(newUser)
     } catch (error) {
